@@ -1,0 +1,61 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00B7FF;
+  cursor: pointer;
+}
+div#resultData, div#byPeriod{
+  margin: 30px 0;
+}
+div#resultData table tr:nth-child(2n+1) {
+  background-color: #dedede;
+  height: 30px;
+}
+div#resultData table tr:nth-child(1) {
+  background-color: #bbb;
+}
+div#resultData table tr:last-child {
+  background-color: #fff;
+}
+div#resultData table tr:nth-child(2n) {
+  height: 30px;
+}
+div#resultData table {
+  width: 100%;
+}
+div#resultData table tr td:nth-child(1), div#resultData table tr th:nth-child(1) {
+  padding-left: 5px;
+}
+.infoMsg{
+color:#33dd55;
+font-weight: bold;"
+}
+
+
+div.well{
+  height: 250px;
+}
+
+.Absolute-Center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.Absolute-Center.is-Responsive {
+  width: 50%;
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+#logo-container{
+  margin: auto;
+  margin-bottom: 10px;
+  width:200px;
+  height:30px;
+  background-image:url('http://placehold.it/200x30/000000/ffffff/&text=BRAND+LOGO');
+}
