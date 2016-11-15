@@ -1,0 +1,30 @@
+<div class="col-sm-12 col-md-9 col-lg-4" >
+      <form name="myform" ng-submit="insertData()">
+        <div class="infoMsg">{{msg}}</div>
+        <div class="form-group">
+          <input type="hidden" ng-model="name" ng-init="name='Raj'" value="Raj"/>
+        </div>
+        <div class="form-group">
+          <label for="name">Type</label>
+          <select ng-model="kindsDataModel" class="form-control" ng-options="kind.name as kind.text for kind in kindsData"></select>
+        </div>
+        <div class="form-group" ng-hide="kindsDataModel != 'miscItems'">
+          <label for="name">Miscellaneous</label>
+          <input type="text" ng-model="budgetRow.misc" class="form-control" ></select>
+        </div>
+        <div class="form-group">
+          <label for="name">Item</label>
+          <input type="text" ng-model="budgetRow.item" name="item" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="text"  ng-model="budgetRow.price" id="price" name="price" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="name">Date</label>
+          <input type="text" autoclose="true" ng-model="budgetRow.date" id="itemDate" name="itemDate" class="form-control datepicker" required>
+        </div>
+        <input  type="submit" class="btn btn-primary" value="{{subBtnText}}">
+        <input type="reset" class="btn btn-primary" value="Clear">
+      </form>
+    </div>

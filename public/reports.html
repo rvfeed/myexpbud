@@ -1,0 +1,29 @@
+<div id="resultData" class="col-lg-6">
+      <div class="infoMsg">{{msgData}}</div>
+      <table cellpadding='5' cellspacing='5'>
+        <tr><th>Name</th><th>Item</th><th>Price</th><th>Date</th><th>Delete</th><th>Update</th></tr>
+        <tr ng-repeat="result in resultData">
+          <td>{{result.name}}</td>          
+          <td>{{result.item}}</td>
+          <td>{{result.price}}</td>
+          <td>{{result.date | date}}</td>
+          <td><a ng-click="deleteRow(result._id)">Delete</a> </td>
+          <td><a ng-click="updateRow(result._id)">Update</a> </td>
+
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><b>Total</b></td>
+          <td><b>{{getTotal}}</b></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-lg-2" id="byPeriod">
+      <div><a ng-click="getResult('t')">Today</a></div>
+      <div><a ng-click="getResult('w')">This Week</a></div>
+      <div><a ng-click="getResult('m')">This Month</a></div>
+      <div><a ng-click="getResult('y')">This Year</a></div>
+    </div>
+  </div>
