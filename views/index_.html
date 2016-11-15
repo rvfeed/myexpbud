@@ -1,0 +1,96 @@
+<html ng-app="app">
+
+<head>
+	<title>1st JS Ex</title>
+	<script src="/javascripts/angular.min.js"></script>
+</head>
+<body>
+    <input type="text" ng-model="text" ng-blur="" />
+<view>Yeah<just>Heheh</just></view>
+<item name="Item-1"></item>
+<item name="Item-2"></item>
+<item name="Item-3"></item>
+<a><mouse-clicked ebook>Game of thrones (click me)</mouse-clicked></a><br/>
+<a><mouse-clicked magazine>PC World (click me)</mouse-clicked></a>
+<script>
+    var app = angular.module("app",[]);
+    app.directive("view", function(){
+       return{
+            restrict: 'E',
+            transclude: true,
+            scope: {},
+            
+            controller: function($scope, $element){
+                $scope.text = "hii";
+                
+            },
+            template: "<h1>Fuck You Man</h1><div ng-transclude></div>{{text}}"
+            
+       } 
+    })
+    .directive("just", function(){
+    return{
+        require: '^view',
+        restrict: 'E',
+        transclude: true,
+        link: function(scope, element, attrs, viewController){
+            viewController.test = "viewController.text";
+        },
+        template: "{{test}}<div ng-transclude></div>"
+    }
+    });
+    app.directive("item", function() {
+    return {
+        restrict: 'E',
+        scope: {},
+        link: function(scope, element, attrs) {
+            scope.name = attrs.name;
+        },
+        template: '<div><strong>Name:</strong> {{name}} <strong>Select Amount:</strong> <select name="count" ng-model="count"><option value="1">1</option><option value="2">2</option></select> <strong>Selected Amount:</strong> {{count}}</div>'
+    }
+});
+app.directive('mouseClicked', function() {
+    return {
+        restrict: 'E',
+        scope: {},
+        controller: "MouseClickedCtrl as mouseClicked"
+    }
+});
+app.controller('MouseClickedCtrl', function($element) {
+    var mouseClicked = this;
+ 
+    mouseClicked.bookType = null;
+ 
+    mouseClicked.setBookType = function(type) {
+        mouseClicked.bookType = type
+    };
+ 
+    $element.bind("click", function() {
+        alert("Typeof book: " + mouseClicked.bookType + " sent for statistical analysis!");
+    })
+});
+app.directive('ebook', function() {
+    return {
+        require: "mouseClicked",
+        link: function(scope, element, attrs, mouseClickedCtrl) {
+            mouseClickedCtrl.setBookType("EBOOK");
+        }
+    }
+})
+.directive('magazine', function() {
+    return {
+        require: "mouseClicked",
+        link: function(scope, element, attrs, mouseClickedCtrl) {
+            mouseClickedCtrl.setBookType("MAGAZINE");
+        }
+    }
+});
+
+var ex = x => y => x + y;
+    
+var on = ex(3);
+document.write(on(2));
+</script>
+</body>
+
+</html>

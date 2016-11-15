@@ -1,0 +1,8 @@
+{
+  "types": [
+    {"name":"monthlyNeeds", "text": "Monthly Needs"},
+    {"name":"dailyNeeds", "text": "Daily Needs"},
+    {"name":"babyExpend", "text": "Baby Expenditure"},
+    {"name": "miscItems", "text": "Miscellaneous"}
+  ]
+}

@@ -5,7 +5,8 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'), //mongo connection
     bodyParser = require('body-parser'), //parses information from POST
-    methodOverride = require('method-override'); //used to manipulate POST
+    methodOverride = require('method-override'); //used to manipulate 
+    moment = require('moment')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
@@ -19,30 +20,76 @@ router.use(methodOverride(function(req, res){
 
 //build the REST operations at the base for blobs
 //this will be accessible from http://127.0.0.1:3000/blobs if the default route for / is left unchanged
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+router.get('/reports', function(req, res, next) {
+  res.render('reports', { title: 'Express' });
+});
 router.route('/blobs')
     //GET all blobs
     .get(function(req, res, next) {
-        //retrieve all blobs from Monogo
-        mongoose.model('Blob').find({}, function (err, blobs) {
-            if (err) {
-                return console.error(err);
-            } else {
-                //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-                res.format({
+
+var match = {};
+var d = new Date();
+console.log(moment().format('M'));
+var w = moment().format('W');
+
+var h = new Date().getMonth() +1;
+var QQQ = "";
+var flagW = true;
+    switch(req.query.p){
+        case 't':
+            var start = moment().startOf('day'); // set to 12:00 am today
+            var end = moment().endOf('day'); // set to 23:59 pm today
+            QQ = {date: {$gte: start, $lt: end}}
+            flagW = false;
+        break;
+        case 'm':
+             QQ = [{$project: {"name":1, "date": 1, "price": 1, "item": 1,  "month" :{ $month : "$date"}}},{$match : { "month": parseInt(moment().format('M'))}}];
+            QQQ = [ 
+                    {$group: { "_id" :{'month': { $month: "$date"},'date': "$date",   "price": "$price"}}},
+                    {$group:{ "_id": "$_id.month", "min":{$min:"$_id.price"}, "max":{$max:"$_id.price"}, "count":{$sum:1},"avg":{$avg:"$_id.price"},"total": {$sum: "$_id.price"} }}
+                  ];
+        break;
+        case 'w':
+             h = parseInt(moment().format('W'));
+            QQ = [{$project: {"name":1, "date": 1, "price": 1, "item": 1,  "week" :{ $week : "$date"}}},{$match : { "week": parseInt(moment().format('W'))}}];
+              QQQ = [ 
+                    {$group: { "_id" :{'week': { $week: "$date"},'date': "$date",   "price": "$price"}}},
+                    {$group:{ "_id": "$_id.week", "min":{$min:"$_id.price"}, "max":{$max:"$_id.price"}, "count":{$sum:1},"avg":{$avg:"$_id.price"},"total": {$sum: "$_id.price"} }}
+                  ];
+        break;
+        case 'y':
+            h = parseInt(moment().format('Y'));
+            QQ = [{$project: {"name":1, "date": 1, "price": 1, "item": 1,  "year" :{ $year : "$date"}}},{$match : { "year": parseInt(moment().format('Y'))}}];
+        break;
+        default:
+        QQ = [{$project: {"name":1, "date": 1, "price": 1, "item": 1, "month" :{ $month : "$date"}}},{$match : { "month": parseInt(moment().format('M'))}}];
+        break;
+    }
+
+var callback = function(e, d){
+    console.log(d);
+     res.format({
                     //HTML response will render the index.jade file in the views/blobs folder. We are also setting "blobs" to be an accessible variable in our jade view
                     html: function(){
                         res.render('index.html', {
                             title: 'All my Blobs',
-                            "blobs" : blobs
+                            "blobs" : d
                         });
                     },
                     //JSON response will show all blobs in JSON format
                     json: function(){
-                        res.json(blobs);
+                        res.json(d);
                     }
                 });
-            }
-        });
+}
+
+    if(flagW)
+        mongoose.model('Blob').aggregate(QQ, callback);
+    else
+        mongoose.model('Blob').find(QQ, callback);
     })
     //POST a new blob
     .post(function(req, res) {
